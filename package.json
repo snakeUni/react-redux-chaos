@@ -1,0 +1,20 @@
+{
+  "name": "chaos",
+  "version": "0.0.1",
+  "description": "a status manage library for react with graphQL",
+  "main": "index.js",
+  "repository": "https://github.com/snakeUni/chaos.git",
+  "author": "Uni <1025687605@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.5",
+    "@types/typescript": "^2.0.0",
+    "husky": "^3.0.1",
+    "prettier": "^1.18.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  }
+}
