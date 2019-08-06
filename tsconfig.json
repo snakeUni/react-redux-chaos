@@ -7,7 +7,6 @@
     "noImplicitReturns": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "outFile": "lib",
     "target": "es5",
     "lib": ["es6", "ES2016", "dom"],
     "moduleResolution": "node",
