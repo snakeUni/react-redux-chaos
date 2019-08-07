@@ -7,14 +7,17 @@ const { useRef, useEffect } = React
  * useStore 返回一个 store
  * 包含 state, dispatch, subscribe
  */
-export default function useStore<T>(reducer: ReducerType<T>, initialState: T): UseStoreResult<T> {
-  const [get, set] = useCurrent(initialState)
+export default function useStore<T extends object>(
+  reducer: ReducerType<T>,
+  initialState?: T
+): UseStoreResult<T> {
+  const [get, set] = useCurrent(initialState || {})
   const listeners = useRef<Listener[]>([])
 
   /**
    * 返回 store 存的所有的 state
    */
-  const getState = () => get()
+  const getState = () => get() as T
 
   /**
    * 监听器用于更新子组件
@@ -34,7 +37,7 @@ export default function useStore<T>(reducer: ReducerType<T>, initialState: T): U
   }
 
   const dispatch = (action: Action) => {
-    const state = reducer(get(), action)
+    const state = reducer(get() as T, action)
     set(state)
     return action
   }

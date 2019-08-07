@@ -19,3 +19,11 @@ export interface UseStoreResult<T> {
 export type UseStore<T> = (reducer: ReducerType<T>, initialState: T) => UseStoreResult<T>
 
 export type Listener = () => any
+
+/**
+ * provider 组件
+ */
+export interface ProviderProps<T> {
+  value: UseStoreResult<T>
+  children?: React.ReactNode
+}
