@@ -27,3 +27,7 @@ export interface ProviderProps<T> {
   value: UseStoreResult<T>
   children?: React.ReactNode
 }
+
+export interface Reducers<T> {
+  [key: string]: (state: T, action: Action) => any
+}
