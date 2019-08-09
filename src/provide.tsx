@@ -5,8 +5,7 @@ import { ProviderProps } from './type'
 const { useState } = React
 
 export default function Provider<T>({ value, children }: ProviderProps<T>) {
-  const { getState, dispatch } = value
-  const [api] = useState({ getState, dispatch })
+  const [api] = useState(value)
 
   return (
     <storeContext.Provider value={value}>

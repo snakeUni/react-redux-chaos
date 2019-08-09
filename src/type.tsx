@@ -12,13 +12,21 @@ export interface Action {
 
 export interface UseStoreResult<T> {
   getState: () => T
-  dispatch: (action: Action) => Action
+  dispatch: (action: Action, uuid: string) => Action
   subscriber: (listener: Listener) => () => void
+}
+
+export interface UseSelector<T> {
+  getState: () => T
+  dispatch: (action: Action) => Action
 }
 
 export type UseStore<T> = (reducer: ReducerType<T>, initialState: T) => UseStoreResult<T>
 
-export type Listener = () => any
+export interface Listener {
+  uuid: string
+  listener: () => any
+}
 
 /**
  * provider 组件

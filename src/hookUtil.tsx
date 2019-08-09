@@ -28,3 +28,10 @@ export function useCurrent<T>(initialState: T): [() => T, (state: T) => void, T]
 
   return [get, set, state]
 }
+
+let seed = 0
+const now = Date.now()
+
+export function getUuid() {
+  return `chaos_${now}_${seed++}`
+}

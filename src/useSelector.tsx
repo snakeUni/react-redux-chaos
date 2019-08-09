@@ -5,19 +5,34 @@
  */
 
 import * as React from 'react'
-import { selectorContext, SelectorContext } from './context'
-import { useForceUpdate } from './hookUtil'
+import { selectorContext } from './context'
+import { useForceUpdate, getUuid } from './hookUtil'
+import { Action, UseSelector } from './type'
 
 const { useEffect, useContext } = React
 
-export default function useSelector<T>(callbalk: (state: T) => any[]): SelectorContext<T> {
+export default function useSelector<T>(): UseSelector<T> {
   const api = useContext(selectorContext)
   const forceUpdate = useForceUpdate()
+  const randomId = React.useRef(getUuid())
+
   if (!api) {
     throw new Error('expected useSelector to be used in Provider')
   }
+
   useEffect(() => {
-    forceUpdate(false)
-  }, callbalk(api.getState()))
-  return api as any
+    // 订阅需要的信息
+    api.subscriber({
+      uuid: randomId.current,
+      listener: () => forceUpdate(false)
+    })
+  }, [api, forceUpdate])
+
+  return {
+    dispatch: (action: Action) => {
+      api.dispatch(action, randomId.current)
+      return action
+    },
+    getState: api.getState
+  }
 }

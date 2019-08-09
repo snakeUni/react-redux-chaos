@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Reducers, Action } from './type'
 
 /**
@@ -7,9 +6,11 @@ import { Reducers, Action } from './type'
  */
 export default function combineReducers<T>(reducers: Reducers<T>) {
   const keys = Object.keys(reducers)
+
   if (keys.length === 0) {
     throw new Error('reducer cannot be null')
   }
+
   return (state: T, action: Action) => {
     let hasChanged = false
     const nextState = {}
@@ -20,6 +21,7 @@ export default function combineReducers<T>(reducers: Reducers<T>) {
       ;(nextState as any)[key] = nextStateWithKey
       hasChanged = hasChanged || nextStateWithKey !== previousState
     })
+
     return hasChanged ? nextState : state
   }
 }
