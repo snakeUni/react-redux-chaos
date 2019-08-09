@@ -1,5 +1,5 @@
 {
-  "name": "chaos",
+  "name": "react-redux-chaos",
   "version": "0.0.1",
   "description": "a status manage library for react with graphQL",
   "main": "lib/index.js",
