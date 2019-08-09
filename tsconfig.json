@@ -12,7 +12,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noImplicitThis": false,
-    "declaration": true
+    "declaration": true,
+    "outDir": "lib"
   },
   "include": ["src"]
 }
