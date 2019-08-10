@@ -8,6 +8,7 @@ export type ReducerType<T> = (state: T, action: Action) => T
  */
 export interface Action {
   type: string
+  [key: string]: any
 }
 
 export interface UseStoreResult<T> {

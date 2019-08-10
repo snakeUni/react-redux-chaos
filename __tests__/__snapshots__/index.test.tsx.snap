@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-redux-chaos test snapshot 1`] = `"<div><div>count: 0</div><div><button>increaseCount</button><button>decreaseCount</button></div></div><div><div>age: 18</div><div><button>increaseAge</button><button>decreaseAge</button></div></div>"`;
