@@ -22,10 +22,14 @@ export default function useSelector<T>(): UseSelector<T> {
 
   useEffect(() => {
     // 订阅需要的信息
-    api.subscriber({
+    const unsubcriber = api.subscriber({
       uuid: randomId.current,
       listener: () => forceUpdate(false)
     })
+    // 组件卸载的时候取消注册
+    return () => {
+      unsubcriber()
+    }
   }, [api, forceUpdate])
 
   return {
