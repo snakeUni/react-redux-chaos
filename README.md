@@ -88,7 +88,7 @@ import React from 'react'
 import { useSelector } from 'react-redux-chaos'
 
 export default function ComponentA() {
-  const { getState, dispatch } = useSelector()
+  const { getState, dispatch } = useSelector(() => ['count'])
   const state = getState();
 
   return (
@@ -110,7 +110,7 @@ import React from 'react'
 import { useSelector } from 'react-redux-chaos'
 
 export default function ComponentB() {
-  const { getState, dispatch } = useSelector()
+  const { getState, dispatch } = useSelector(() => ['name'])
   const state = getState();
 
   return (
@@ -124,3 +124,45 @@ export default function ComponentB() {
 ```
 
 B 组件的效果和 A 组件是类似的。
+
+## useSelector
+
+`useSelector` 是需要在组件中使用的一个 `hook`, 需要传递一个回调函数，回调函数返回一个数组，数组的 `key` 是组件中需要使用的值
+
+用法
+
+```js
+useSelector(() => ['count'])
+```
+
+此时 `count` 是需要使用的，只要在组件中用到的值都需要加入依赖, 如果用到的是对象比如
+
+```js
+const { getState } = useSelector(() => ['a'])
+
+const state = getState()
+
+state.a.b
+```
+
+那么此时就需要 `a` 加入到依赖中，那么只要 a 中的任何值发生变化都会触发 `render`, 因为需要进行局部 `render`, 所以不会对依赖的内容进行深比较, 目前只对 `state 的第一层进行比较`, 下面的 state
+
+`state`
+
+```js
+{
+  a: 10,
+  b: {
+    c: 1,
+    d: 2
+  }
+}
+```
+
+在使用 `c` 或者 `d` 的时候， 要把 `b` 加入到依赖中，每次只会对 `b`, 进行比较，所以需要更新内部的值的话，记得修改 `b` 的引用。 
+
+## 后续计划
+
++ 优化 `useSelector` 的用法，简化依赖项
++ 增加中间件
+  

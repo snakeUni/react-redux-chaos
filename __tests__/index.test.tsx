@@ -41,7 +41,7 @@ describe('react-redux-chaos test', () => {
   }
 
   function CountComponent() {
-    const { getState, dispatch } = useSelector()
+    const { getState, dispatch } = useSelector(() => ['count'])
     const state: any = getState()
 
     return (
@@ -56,7 +56,7 @@ describe('react-redux-chaos test', () => {
   }
 
   function AgeComponent() {
-    const { getState, dispatch } = useSelector()
+    const { getState, dispatch } = useSelector(() => ['age'])
     const state: any = getState()
 
     return (
