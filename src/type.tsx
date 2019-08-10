@@ -8,16 +8,16 @@ export type ReducerType<T> = (state: T, action: Action) => T
  */
 export interface Action {
   type: string
-  [key: string]: any
+  payload?: any
 }
 
 export interface UseStoreResult<T> {
   getState: () => T
-  dispatch: (action: Action, uuid: string) => Action
+  dispatch: (action: Action, depth: any[]) => Action
   subscriber: (listener: Listener) => () => void
 }
 
-export interface UseSelector<T> {
+export interface UseSelectorResult<T> {
   getState: () => T
   dispatch: (action: Action) => Action
 }
@@ -25,8 +25,8 @@ export interface UseSelector<T> {
 export type UseStore<T> = (reducer: ReducerType<T>, initialState: T) => UseStoreResult<T>
 
 export interface Listener {
-  uuid: string
   listener: () => any
+  props: any[]
 }
 
 /**

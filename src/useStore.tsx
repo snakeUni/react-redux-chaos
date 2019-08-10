@@ -24,10 +24,6 @@ export default function useStore<T extends object>(
    * @param listener
    */
   const subscriber = (listener: Listener) => {
-    if (typeof listener === 'undefined') {
-      throw new Error('expect listener to be a object')
-    }
-
     if (typeof listener !== 'object') {
       throw new Error('expected listener to be a object')
     }
@@ -41,15 +37,29 @@ export default function useStore<T extends object>(
     }
   }
 
-  const dispatch = (action: Action, uuid: string) => {
+  const dispatch = (action: Action, deps: string[]) => {
+    const oldState = get()
     // 获取到执行后的 state
-    const state = reducer(get() as T, action)
+    const state = reducer(oldState as T, action)
     set(state)
+
+    const changeKeys: string[] = []
+
+    // 进行浅比较获取到修改的值
+    deps.forEach(key => {
+      if ((oldState as any)[key] !== (state as any)[key]) {
+        changeKeys.push(key)
+      }
+    })
 
     // 遍历监听器，只对变化的组件进行更新
     listeners.current.forEach(listener => {
-      if (listener.uuid === uuid) {
-        listener.listener()
+      const listenerProps = listener.props
+      // 遍历监听器，对修改的部分进行更新
+      for (let i = 0; i < changeKeys.length; i++) {
+        if (listenerProps.indexOf(changeKeys[i]) > -1) {
+          listener.listener()
+        }
       }
     })
 

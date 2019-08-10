@@ -29,9 +29,13 @@ export function useCurrent<T>(initialState: T): [() => T, (state: T) => void, T]
   return [get, set, state]
 }
 
-let seed = 0
-const now = Date.now()
-
-export function getUuid() {
-  return `chaos_${now}_${seed++}`
+export function isSame(src: any[], target: any[]) {
+  let isSame = true
+  for (let i = 0; i < src.length; i++) {
+    if (target.indexOf(src[i]) === -1) {
+      isSame = false
+      break
+    }
+  }
+  return isSame
 }

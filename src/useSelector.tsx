@@ -6,35 +6,40 @@
 
 import * as React from 'react'
 import { selectorContext } from './context'
-import { useForceUpdate, getUuid } from './hookUtil'
-import { Action, UseSelector } from './type'
+import { useForceUpdate, isSame } from './hookUtil'
+import { Action, UseSelectorResult } from './type'
 
 const { useEffect, useContext } = React
 
-export default function useSelector<T>(): UseSelector<T> {
+export default function useSelector<T>(callback: (state: T) => any[]): UseSelectorResult<T> {
   const api = useContext(selectorContext)
   const forceUpdate = useForceUpdate()
-  const randomId = React.useRef(getUuid())
 
   if (!api) {
     throw new Error('expected useSelector to be used in Provider')
   }
 
+  const propsRef = React.useRef(callback(api.getState()))
+  // 获取到返回的 props
+  const props = callback(api.getState())
+
+  if (!isSame(propsRef.current, props)) {
+    propsRef.current = props
+  }
+
+  const current = propsRef.current
+
   useEffect(() => {
     // 订阅需要的信息
-    const unsubcriber = api.subscriber({
-      uuid: randomId.current,
-      listener: () => forceUpdate(false)
+    api.subscriber({
+      listener: () => forceUpdate(false),
+      props: current
     })
-    // 组件卸载的时候取消注册
-    return () => {
-      unsubcriber()
-    }
-  }, [api, forceUpdate])
+  }, [api, forceUpdate, current])
 
   return {
     dispatch: (action: Action) => {
-      api.dispatch(action, randomId.current)
+      api.dispatch(action, props)
       return action
     },
     getState: api.getState
