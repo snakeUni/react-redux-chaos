@@ -1,4 +1,4 @@
-# chaos
+# react-redux-chaos
 
 a status manage library for react
 
