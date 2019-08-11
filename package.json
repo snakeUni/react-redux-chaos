@@ -1,6 +1,6 @@
 {
   "name": "react-redux-chaos",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a status manage library for react with graphQL",
   "main": "lib/index.js",
   "scripts": {
