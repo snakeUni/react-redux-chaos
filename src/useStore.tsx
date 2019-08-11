@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useCurrent } from './hookUtil'
+import { useCurrent, getPath } from './hookUtil'
 import { ReducerType, UseStoreResult, Listener, Action } from './type'
 
 const { useRef, useEffect } = React
@@ -47,7 +47,9 @@ export default function useStore<T extends object>(
 
     // 进行浅比较获取到修改的值
     deps.forEach(key => {
-      if ((oldState as any)[key] !== (state as any)[key]) {
+      const oldValue = getPath(oldState, key)
+      const newValue = getPath(state, key)
+      if (oldValue !== newValue) {
         changeKeys.push(key)
       }
     })
