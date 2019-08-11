@@ -1,4 +1,5 @@
 import * as React from 'react'
+import get from 'lodash.get'
 
 function forceReducer(state: boolean) {
   return !state
@@ -38,4 +39,8 @@ export function isSame(src: any[], target: any[]) {
     }
   }
   return isSame
+}
+
+export function getPath(target: any, path: string | string[]) {
+  return get(target, path)
 }

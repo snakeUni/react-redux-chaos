@@ -33,6 +33,7 @@
     "@babel/preset-react": "^7.0.0",
     "@testing-library/react": "^9.0.2",
     "@types/jest": "^24.0.17",
+    "@types/lodash.get": "^4.4.6",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
     "@types/typescript": "^2.0.0",
@@ -50,5 +51,8 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-react-hooks": "^2.2.1",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "lodash.get": "^4.4.2"
   }
 }

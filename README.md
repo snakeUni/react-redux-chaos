@@ -145,7 +145,8 @@ const state = getState()
 state.a.b
 ```
 
-那么此时就需要 `a` 加入到依赖中，那么只要 a 中的任何值发生变化都会触发 `render`, 因为需要进行局部 `render`, 所以不会对依赖的内容进行深比较, 目前只对 `state 的第一层进行比较`, 下面的 state
+那么此时在组件中使用到 `a`, 那么就把 `a` 加入到依赖中，如果使用了 `a.b`, 就把 `a.b` 加入到依赖中，这样如果在其他组件中使用了 `a.c`, 那么 `b` 属性的
+更新并不会让使用到 `a.c` 组件 `render`, 看下面的例子
 
 `state`
 
@@ -159,7 +160,31 @@ state.a.b
 }
 ```
 
-在使用 `c` 或者 `d` 的时候， 要把 `b` 加入到依赖中，每次只会对 `b`, 进行比较，所以需要更新内部的值的话，记得修改 `b` 的引用。 
+如果 A 组件使用了 `b.c`, B 组件使用了 `b.d`, 那么依赖就可以这样写
+
+```js
+function A() {
+  const {} = useSelector(() => ['b.c'])
+}
+
+function B() {
+  const {} = useSelector(() => ['b.d'])
+}
+```
+
+这样每次 `A` 组件 `render` 都不会造成 `B` 组件 `render`, 但是如果 A 组件和 B 组件都用到了 `b.c` 和 `b.d`
+
+那么此时只需要把 `b` 加入到依赖中即可，深层比较是部分性能的优化
+
+```js
+function A() {
+  const {} = useSelector(() => ['b'])
+}
+
+function B() {
+  const {} = useSelector(() => ['b'])
+}
+```
 
 ## 后续计划
 
