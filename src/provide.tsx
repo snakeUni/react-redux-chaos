@@ -5,6 +5,7 @@ import { ProviderProps } from './type'
 const { useState } = React
 
 export default function Provider<T>({ value, children }: ProviderProps<T>) {
+  // 缓存 value 的值进行局部更新
   const [api] = useState(value)
 
   return (

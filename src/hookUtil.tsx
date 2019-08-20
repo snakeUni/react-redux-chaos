@@ -44,3 +44,7 @@ export function isSame(src: any[], target: any[]) {
 export function getPath(target: any, path: string | string[]) {
   return get(target, path)
 }
+
+export function compose(...fns: any[]) {
+  return fns.reduce((f, g) => (...args: any[]) => f(g(...args)))
+}
