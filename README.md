@@ -186,8 +186,45 @@ function B() {
 }
 ```
 
+## 使用中间件
+
+中间件的使用方法和在 `redux` 中保持一致，但是因为在 `useSelector` 中又修改了 `dispatch`， 所以中间件的 `dispatch` 记得传递第二个参数
+
+`logger`
+
+```js
+export function logger({ getState }: { getState: any }) {
+  return (next: any) => (action: any, depth?: any[]) => {
+    console.log('will dispatch', action);
+
+    // Call the next dispatch method in the middleware chain.
+    const returnValue = next(action, depth);
+
+    console.log('state after dispatch', getState());
+
+    // This will likely be the action itself, unless
+    // a middleware further in chain changed it.
+    return returnValue;
+  };
+}
+```
+
+在传递 `action` 的时候加上可选的第二个参数, 但是在业务中使用的时候还是只需要使用 `useSelector` 即可, 使用 `selector` 中的 `dispatch`
+
+使用 `logger`
+
+```js
+import { applyMiddleware } from 'react-redux-chaos'
+
+function App() {
+  const store = useStore(
+    reducer,
+    { count: 0, age: 10, person: {} },
+    applyMiddleware(logger))
+}
+```
+
 ## 后续计划
 
 + 优化 `useSelector` 的用法，简化依赖项
-+ 增加中间件
   

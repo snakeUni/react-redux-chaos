@@ -7,7 +7,12 @@ import { compose } from './hookUtil'
 export default function applyMiddleware(...middlewares: any[]) {
   return (createStore: any) => (...args: any[]) => {
     const store = createStore(...args)
-    let dispatch = (...args: any[]) => {}
+    let dispatch = (...args: any[]) => {
+      throw new Error(
+        'Dispatching while constructing your middleware is not allowed. ' +
+          'Other middleware would not be applied to this dispatch.'
+      )
+    }
 
     const middlewareAPI = {
       getState: store.getState,

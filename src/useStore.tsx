@@ -2,17 +2,43 @@ import * as React from 'react'
 import { useCurrent, getPath } from './hookUtil'
 import { ReducerType, UseStoreResult, Listener, Action } from './type'
 
-const { useRef, useEffect } = React
+const { useRef } = React
 /**
  * useStore 返回一个 store
  * 包含 state, dispatch, subscribe
  */
 export default function useStore<T extends object>(
   reducer: ReducerType<T>,
-  initialState?: T
+  initialState?: T,
+  enhancer?: any
 ): UseStoreResult<T> {
   const [get, set] = useCurrent(initialState || {})
   const listeners = useRef<Listener[]>([])
+
+  // 继续使用 redux 中的中间件
+  if (
+    (typeof initialState === 'function' && typeof enhancer === 'function') ||
+    (typeof enhancer === 'function' && typeof arguments[3] === 'function')
+  ) {
+    throw new Error(
+      'It looks like you are passing several store enhancers to ' +
+        'useStore(). This is not supported. Instead, compose them ' +
+        'together to a single function.'
+    )
+  }
+
+  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = initialState
+    initialState = undefined
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
+
+    return enhancer(useStore)(reducer, initialState)
+  }
 
   /**
    * 返回 store 存的所有的 state
@@ -79,12 +105,6 @@ export default function useStore<T extends object>(
 
     return action
   }
-
-  useEffect(() => {
-    if (typeof reducer !== 'function') {
-      throw new Error('expect reducer to be a function')
-    }
-  }, [reducer])
 
   return {
     getState: getState,
